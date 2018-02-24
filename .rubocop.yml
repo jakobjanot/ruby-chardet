@@ -1,0 +1,29 @@
+AllCops:
+  Include:
+    - 'Gemfile'
+    - 'Rakefile'
+  Exclude:
+    - bin/**/*
+  DisplayCopNames: true
+  TargetRubyVersion: 2.3
+
+Metrics/BlockLength:
+  Exclude:
+    - '*.gemspec'
+    - 'Rakefile'
+    - '**/*.rake'
+
+Style/Documentation:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Metrics/LineLength:
+  Max: 90
+  Exclude:
+    - 'Gemfile'
+    - 'Guardfile'
