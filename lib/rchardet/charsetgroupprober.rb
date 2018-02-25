@@ -1,11 +1,11 @@
 ######################## BEGIN LICENSE BLOCK ########################
 # The Original Code is Mozilla Communicator client code.
-# 
+#
 # The Initial Developer of the Original Code is
 # Netscape Communications Corporation.
 # Portions created by the Initial Developer are Copyright (C) 1998
 # the Initial Developer. All Rights Reserved.
-# 
+#
 # Contributor(s):
 #   Jeff Hodges - port to Ruby
 #   Mark Pilgrim - port to Python
@@ -14,12 +14,12 @@
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
-# 
+#
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -68,21 +68,21 @@ module CharDet
         next unless st
         if st == EFoundIt
           @bestGuessProber = prober
-          return state()
+          return state
         elsif st == ENotMe
           prober.active = false
           @activeNum -= 1
           if @activeNum <= 0
             @state = ENotMe
-            return state()
+            return state
           end
         end
       end
-      return state()
+      return state
     end
 
     def confidence()
-      st = state()
+      st = state
       if st == EFoundIt
         return 0.99
       elsif st == ENotMe

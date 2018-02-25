@@ -63,13 +63,13 @@ module CharDet
         end
       end
 
-      if state() == EDetecting
+      if state == EDetecting
         if confidence() > SHORTCUT_THRESHOLD
           @state = EFoundIt
         end
       end
 
-      return state()
+      return state
     end
 
     def confidence

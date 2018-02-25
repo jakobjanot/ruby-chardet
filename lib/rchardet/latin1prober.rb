@@ -121,11 +121,11 @@ module CharDet
         @lastCharClass = charClass
       end
 
-      return state()
+      return state
     end
 
     def confidence
-      if state() == ENotMe
+      if state == ENotMe
         return 0.01
       end
 

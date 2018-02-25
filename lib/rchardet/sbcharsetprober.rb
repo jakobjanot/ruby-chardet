@@ -69,7 +69,7 @@ module CharDet
       end
       aLen = aBuf.length
       if aLen == 0
-        return state()
+        return state
       end
       aBuf.each_byte do |b|
         c = b.chr
@@ -91,7 +91,7 @@ module CharDet
         @lastOrder = order
       end
 
-      if state() == EDetecting
+      if state == EDetecting
         if @totalSeqs > SB_ENOUGH_REL_THRESHOLD
           cf = confidence()
           if cf > POSITIVE_SHORTCUT_THRESHOLD
@@ -104,7 +104,7 @@ module CharDet
         end
       end
 
-      return state()
+      return state
     end
 
     def confidence

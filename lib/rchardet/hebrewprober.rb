@@ -214,7 +214,7 @@ module CharDet
       # We automatically filter out all 7-bit characters (replace them with spaces)
       # so the word boundary detection works properly. [MAP]
 
-      if state() == ENotMe
+      if state == ENotMe
         # Both model probers say it's not them. No reason to continue.
         return ENotMe
       end
@@ -280,7 +280,7 @@ module CharDet
 
     def state
       # Remain active as long as any of the model probers are active.
-      if (@logicalProber.state() == ENotMe) and (@visualProber.state() == ENotMe)
+      if (@logicalProber.state == ENotMe) and (@visualProber.state == ENotMe)
         return ENotMe
       end
       return EDetecting

@@ -7,8 +7,8 @@ CONTENTS = "\345\225\206\346\245\255\346\234\215\345\213\231\347\232\204Ruby on 
 
 def guess_encoding(data)
   cd = CharDet.detect(data)
-  encoding = cd['encoding']
-  confidence = cd['confidence'] # 0.0 <= confidence <= 1.0
+  encoding = cd[:encoding]
+  confidence = cd[:confidence] # 0.0 <= confidence <= 1.0
   puts "encoding = %s, confidense = %s" % [encoding, confidence]
 end
 

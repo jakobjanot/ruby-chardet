@@ -74,12 +74,12 @@ module CharDet
       end
       @lastChar[0] = aBuf[aLen-1, 1]
 
-      if state() == EDetecting
+      if state == EDetecting
         if @distributionAnalyzer.got_enough_data() and (confidence() > SHORTCUT_THRESHOLD)
           @state = EFoundIt
         end
       end
-      return state()
+      return state
     end
 
     def confidence

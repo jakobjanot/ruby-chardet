@@ -47,7 +47,7 @@ module CharDet
     end
 
     def reset
-      @result = {'encoding' => nil, 'confidence' => 0.0}
+      @result = {encoding:nil, confidence: 0.0}
       @done = false
       @start = true
       @gotData = false
@@ -71,25 +71,25 @@ module CharDet
         # If the data starts with BOM, we know it is UTF
         if aBuf[0, 3] == "\xEF\xBB\xBF"
           # EF BB BF  UTF-8 with BOM
-          @result = {'encoding' => "UTF-8", 'confidence' => 1.0}
+          @result = {encoding:"UTF-8", confidence: 1.0}
         elsif aBuf[0, 4] == "\xFF\xFE\x00\x00"
           # FF FE 00 00  UTF-32, little-endian BOM
-          @result = {'encoding' => "UTF-32LE", 'confidence' => 1.0}
+          @result = {encoding:"UTF-32LE", confidence: 1.0}
         elsif aBuf[0, 4] == "\x00\x00\xFE\xFF"
           # 00 00 FE FF  UTF-32, big-endian BOM
-          @result = {'encoding' => "UTF-32BE", 'confidence' => 1.0}
+          @result = {encoding:"UTF-32BE", confidence: 1.0}
         elsif aBuf[0, 4] == "\xFE\xFF\x00\x00"
           # FE FF 00 00  UCS-4, unusual octet order BOM (3412)
-          @result = {'encoding' => "X-ISO-10646-UCS-4-3412", 'confidence' => 1.0}
+          @result = {encoding:"X-ISO-10646-UCS-4-3412", confidence: 1.0}
         elsif aBuf[0, 4] == "\x00\x00\xFF\xFE"
           # 00 00 FF FE  UCS-4, unusual octet order BOM (2143)
-          @result = {'encoding' =>  "X-ISO-10646-UCS-4-2143", 'confidence' =>  1.0}
+          @result = {encoding: "X-ISO-10646-UCS-4-2143", confidence:  1.0}
         elsif aBuf[0, 2] == "\xFF\xFE"
           # FF FE  UTF-16, little endian BOM
-          @result = {'encoding' =>  "UTF-16LE", 'confidence' =>  1.0}
+          @result = {encoding: "UTF-16LE", confidence:  1.0}
         elsif aBuf[0, 2] == "\xFE\xFF"
           # FE FF  UTF-16, big endian BOM
-          @result = {'encoding' =>  "UTF-16BE", 'confidence' =>  1.0}
+          @result = {encoding: "UTF-16BE", confidence:  1.0}
         elsif aBuf[0, 3] == "\x2B\x2F\x76" && ["\x38", "\x39", "\x2B", "\x2F"].include?(aBuf[3, 1])
           # NOTE: Ruby only includes "dummy" support for UTF-7.
           # A Ruby UTF-7 string can't have methods called on it, nor can it be converted to anything else, but "BINARY"/"ASCII-8BIT".
@@ -99,12 +99,12 @@ module CharDet
           # 2B 2F 76 2B  UTF-7
           # 2B 2F 76 2F  UTF-7
           # 2B 2F 76 38 2D  UTF-7 with no following character (empty string)
-          @result = {'encoding' =>  "UTF-7", 'confidence' =>  0.99}
+          @result = {encoding: "UTF-7", confidence:  0.99}
         end
       end
 
       @gotData = true
-      if @result['encoding'] and (@result['confidence'] > 0.0)
+      if @result[:encoding] and (@result[:confidence] > 0.0)
         @done = true
         return
       end
@@ -122,8 +122,8 @@ module CharDet
           @escCharSetProber = EscCharSetProber.new()
         end
         if @escCharSetProber.feed(aBuf) == EFoundIt
-          @result = {'encoding' =>  @escCharSetProber.charset_name(),
-            'confidence' =>  @escCharSetProber.confidence()
+          @result = {encoding: @escCharSetProber.charset_name(),
+            confidence:  @escCharSetProber.confidence()
           }
           @done = true
         end
@@ -133,8 +133,8 @@ module CharDet
         end
         for prober in @charSetProbers
           if prober.feed(aBuf) == EFoundIt
-            @result = {'encoding' =>  prober.charset_name(),
-              'confidence' =>  prober.confidence()}
+            @result = {encoding: prober.charset_name(),
+              confidence:  prober.confidence()}
             @done = true
             break
           end
@@ -152,7 +152,7 @@ module CharDet
       @done = true
 
       if @inputState == EPureAscii
-        @result = {'encoding' => 'ascii', 'confidence' => 1.0}
+        @result = {encoding:'ascii', confidence: 1.0}
         return @result
       end
 
@@ -161,8 +161,8 @@ module CharDet
         @charSetProbers.each{ |prober| confidences[prober] = prober.confidence }
         maxProber = @charSetProbers.max{ |a,b| confidences[a] <=> confidences[b] }
         if maxProber and maxProber.confidence > MINIMUM_THRESHOLD
-          @result = {'encoding' =>  maxProber.charset_name(),
-            'confidence' =>  maxProber.confidence()}
+          @result = {encoding: maxProber.charset_name(),
+            confidence:  maxProber.confidence()}
           return @result
         end
       end

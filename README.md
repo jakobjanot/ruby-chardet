@@ -12,8 +12,8 @@ require 'rubygems'
 require 'rchardet'
 
 cd = CharDet.detect(some_data)
-encoding = cd['encoding']
-confidence = cd['confidence'] # 0.0 <= confidence <= 1.0
+encoding = cd[:encoding]
+confidence = cd[:confidence] # 0.0 <= confidence <= 1.0
 ```
 
 ### [Contributors](http://github.com/grosser/pru/contributors)

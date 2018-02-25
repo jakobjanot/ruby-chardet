@@ -30,8 +30,8 @@ describe "Complex" do
       end
 
       assert u.result, "result should not be nil"
-      assert u.result['encoding'], "encoding should not be nil, result: #{u.result.inspect}"
-      assert_equal encoding, u.result['encoding'].downcase
+      assert u.result[:encoding], "encoding should not be nil, result: #{u.result.inspect}"
+      assert_equal encoding, u.result[:encoding].downcase
     end
   end
 end

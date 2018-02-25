@@ -74,17 +74,17 @@ module CharDet
             @activeSM -= 1
             if @activeSM <= 0
               @state = ENotMe
-              return state()
+              return state
             end
           elsif codingState == EItsMe
             @state = EFoundIt
             @detectedCharset = codingSM.coding_state_machine()
-            return state()
+            return state
           end
         end
       end
 
-      return state()
+      return state
     end
   end
 end
