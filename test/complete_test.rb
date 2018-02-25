@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 require_relative "test_helper"
 
 describe "Complex" do
-  SUFFIXES =[
-    '-bulgarian',
-    '-cyrillic',
-    '-greek',
-    '-hebrew',
-    '-hungarian',
-    '-turkish'
-  ]
+  SUFFIXES = [
+    "-bulgarian",
+    "-cyrillic",
+    "-greek",
+    "-hebrew",
+    "-hungarian",
+    "-turkish"
+  ].freeze
 
   folders = Dir[File.expand_path("../assets/*", __FILE__)]
-  folders.select!{ |f| File.directory?(f) }
+  folders.select! { |f| File.directory?(f) }
   tests = folders.flat_map do |path|
     encoding = File.basename(path).downcase
     SUFFIXES.each { |s| encoding.sub!(s, "") }
@@ -21,7 +23,7 @@ describe "Complex" do
   tests.each do |encoding, file|
     it "parses #{encoding}:#{File.basename(file)}" do
       u = CharDet::UniversalDetector.new
-      File.open(file, 'rb') do |f|
+      File.open(file, "rb") do |f|
         f.readlines.each do |line|
           u.feed(line)
           break if u.done
