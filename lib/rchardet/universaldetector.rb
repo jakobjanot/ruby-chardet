@@ -16,12 +16,12 @@
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
-# 
+#
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -122,8 +122,8 @@ module CharDet
           @escCharSetProber = EscCharSetProber.new()
         end
         if @escCharSetProber.feed(aBuf) == EFoundIt
-          @result = {'encoding' =>  @escCharSetProber.get_charset_name(),
-            'confidence' =>  @escCharSetProber.get_confidence()
+          @result = {'encoding' =>  @escCharSetProber.charset_name(),
+            'confidence' =>  @escCharSetProber.confidence()
           }
           @done = true
         end
@@ -133,8 +133,8 @@ module CharDet
         end
         for prober in @charSetProbers
           if prober.feed(aBuf) == EFoundIt
-            @result = {'encoding' =>  prober.get_charset_name(),
-              'confidence' =>  prober.get_confidence()}
+            @result = {'encoding' =>  prober.charset_name(),
+              'confidence' =>  prober.confidence()}
             @done = true
             break
           end
@@ -158,11 +158,11 @@ module CharDet
 
       if @inputState == EHighbyte
         confidences = {}
-        @charSetProbers.each{ |prober| confidences[prober] = prober.get_confidence }
+        @charSetProbers.each{ |prober| confidences[prober] = prober.confidence }
         maxProber = @charSetProbers.max{ |a,b| confidences[a] <=> confidences[b] }
-        if maxProber and maxProber.get_confidence > MINIMUM_THRESHOLD
-          @result = {'encoding' =>  maxProber.get_charset_name(),
-            'confidence' =>  maxProber.get_confidence()}
+        if maxProber and maxProber.confidence > MINIMUM_THRESHOLD
+          @result = {'encoding' =>  maxProber.charset_name(),
+            'confidence' =>  maxProber.confidence()}
           return @result
         end
       end
@@ -171,7 +171,7 @@ module CharDet
         $stderr << "no probers hit minimum threshhold\n" if $debug
         for prober in @charSetProbers[0].probers
           next if !prober
-          $stderr << "#{prober.get_charset_name} confidence = #{prober.get_confidence}\n" if $debug
+          $stderr << "#{prober.charset_name} confidence = #{prober.confidence}\n" if $debug
         end
       end
     end

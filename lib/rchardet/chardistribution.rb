@@ -1,11 +1,11 @@
 ######################## BEGIN LICENSE BLOCK ########################
 # The Original Code is Mozilla Communicator client code.
-# 
+#
 # The Initial Developer of the Original Code is
 # Netscape Communications Corporation.
 # Portions created by the Initial Developer are Copyright (C) 1998
 # the Initial Developer. All Rights Reserved.
-# 
+#
 # Contributor(s):
 #   Jeff Hodges
 #   Mark Pilgrim - port to Python
@@ -14,12 +14,12 @@
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
-# 
+#
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -50,7 +50,7 @@ module CharDet
       # # """feed a character with known length"""
       if aCharLen == 2
         # we only care about 2-bytes character in our distribution analysis
-        order = get_order(aStr)
+        order = order(aStr)
       else
         order = -1
       end
@@ -65,7 +65,7 @@ module CharDet
       end
     end
 
-    def get_confidence
+    def confidence
       # """return confidence based on existing data"""
       # if we didn't receive any character in our consideration range, return negative answer
       if @totalChars <= 0
@@ -89,8 +89,8 @@ module CharDet
       return @totalChars > ENOUGH_DATA_THRESHOLD
     end
 
-    def get_order(aStr)
-      # We do not handle characters based on the original encoding string, but 
+    def order(aStr)
+      # We do not handle characters based on the original encoding string, but
       # convert this encoding string to a number, here called order.
       # This allows multiple encodings of a language to share one frequency table.
       return -1
@@ -105,8 +105,8 @@ module CharDet
       @typicalDistributionRatio = EUCTW_TYPICAL_DISTRIBUTION_RATIO
     end
 
-    def get_order(aStr)
-      # for euc-TW encoding, we are interested 
+    def order(aStr)
+      # for euc-TW encoding, we are interested
       #   first  byte range: 0xc4 -- 0xfe
       #   second byte range: 0xa1 -- 0xfe
       # no validation needed here. State machine has done that
@@ -118,7 +118,7 @@ module CharDet
       end
     end
 
-    def get_confidence
+    def confidence
       if @freqChars <= MINIMUM_DATA_THRESHOLD
         return SURE_NO
       end
@@ -135,8 +135,8 @@ module CharDet
       @typicalDistributionRatio = EUCKR_TYPICAL_DISTRIBUTION_RATIO
     end
 
-    def get_order(aStr)
-      # for euc-KR encoding, we are interested 
+    def order(aStr)
+      # for euc-KR encoding, we are interested
       #   first  byte range: 0xb0 -- 0xfe
       #   second byte range: 0xa1 -- 0xfe
       # no validation needed here. State machine has done that
@@ -157,8 +157,8 @@ module CharDet
       @typicalDistributionRatio = GB2312_TYPICAL_DISTRIBUTION_RATIO
     end
 
-    def get_order(aStr)
-      # for GB2312 encoding, we are interested 
+    def order(aStr)
+      # for GB2312 encoding, we are interested
       #  first  byte range: 0xb0 -- 0xfe
       #  second byte range: 0xa1 -- 0xfe
       # no validation needed here. State machine has done that
@@ -179,8 +179,8 @@ module CharDet
       @typicalDistributionRatio = BIG5_TYPICAL_DISTRIBUTION_RATIO
     end
 
-    def get_order(aStr)
-      # for big5 encoding, we are interested 
+    def order(aStr)
+      # for big5 encoding, we are interested
       #   first  byte range: 0xa4 -- 0xfe
       #   second byte range: 0x40 -- 0x7e , 0xa1 -- 0xfe
       # no validation needed here. State machine has done that
@@ -205,8 +205,8 @@ module CharDet
       @typicalDistributionRatio = JIS_TYPICAL_DISTRIBUTION_RATIO
     end
 
-    def get_order(aStr)
-      # for sjis encoding, we are interested 
+    def order(aStr)
+      # for sjis encoding, we are interested
       #   first  byte range: 0x81 -- 0x9f , 0xe0 -- 0xfe
       #   second byte range: 0x40 -- 0x7e,  0x81 -- oxfe
       # no validation needed here. State machine has done that
@@ -234,8 +234,8 @@ module CharDet
       @typicalDistributionRatio = JIS_TYPICAL_DISTRIBUTION_RATIO
     end
 
-    def get_order(aStr)
-      # for euc-JP encoding, we are interested 
+    def order(aStr)
+      # for euc-JP encoding, we are interested
       #   first  byte range: 0xa0 -- 0xfe
       #   second byte range: 0xa1 -- 0xfe
       # no validation needed here. State machine has done that

@@ -14,12 +14,12 @@
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
-# 
+#
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -42,7 +42,7 @@ module CharDet
       @numOfMBChar = 0
     end
 
-    def get_charset_name
+    def charset_name
       return "utf-8"
     end
 
@@ -57,22 +57,22 @@ module CharDet
           @state = EFoundIt
           break
         elsif codingState == EStart
-          if @codingSM.get_current_charlen() >= 2
+          if @codingSM.current_charlen() >= 2
             @numOfMBChar += 1
           end
         end
       end
 
-      if get_state() == EDetecting
-        if get_confidence() > SHORTCUT_THRESHOLD
+      if state() == EDetecting
+        if confidence() > SHORTCUT_THRESHOLD
           @state = EFoundIt
         end
       end
 
-      return get_state()
+      return state()
     end
 
-    def get_confidence
+    def confidence
       unlike = 0.99
       if @numOfMBChar < 6
         for i in (0...@numOfMBChar)

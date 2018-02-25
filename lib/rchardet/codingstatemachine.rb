@@ -56,11 +56,11 @@ module CharDet
       return @currentState
     end
 
-    def get_current_charlen
+    def current_charlen
       return @currentCharLen
     end
 
-    def get_coding_state_machine
+    def coding_state_machine
       return @model['name']
     end
   end

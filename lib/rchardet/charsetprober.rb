@@ -37,18 +37,18 @@ module CharDet
       @state = EDetecting
     end
 
-    def get_charset_name
+    def charset_name
       return nil
     end
 
     def feed(aBuf)
     end
 
-    def get_state
+    def state
       return @state
     end
 
-    def get_confidence
+    def confidence
       return 0.0
     end
 

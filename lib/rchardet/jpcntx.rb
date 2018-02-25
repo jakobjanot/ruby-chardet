@@ -143,7 +143,7 @@ module CharDet
       # this character will simply our logic and improve performance.
       i = @needToSkipCharNum
       while i < aLen
-        order, charLen = get_order(aBuf[i, 2])
+        order, charLen = order(aBuf[i, 2])
         i += charLen
         if i > aLen
           @needToSkipCharNum = i - aLen
@@ -166,7 +166,7 @@ module CharDet
       return @totalRel > ENOUGH_REL_THRESHOLD
     end
 
-    def get_confidence
+    def confidence
       # This is just one way to calculate confidence. It works well for me.
       if @totalRel > MINIMUM_DATA_THRESHOLD
         return (@totalRel - @relSample[0]) / @totalRel
@@ -175,13 +175,13 @@ module CharDet
       end
     end
 
-    def get_order(aStr)
+    def order(aStr)
       return -1, 1
     end
   end
 
   class SJISContextAnalysis < JapaneseContextAnalysis
-    def get_order(aStr)
+    def order(aStr)
       return -1, 1 if aStr.nil? || aStr.empty?
       # find out current char's byte length
       first = aStr[0, 1]
@@ -203,7 +203,7 @@ module CharDet
   end
 
   class EUCJPContextAnalysis < JapaneseContextAnalysis
-    def get_order(aStr)
+    def order(aStr)
       return -1, 1 unless aStr
       # find out current char's byte length
       first = aStr[0, 1]

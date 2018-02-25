@@ -14,12 +14,12 @@
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
-# 
+#
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -41,7 +41,7 @@ module CharDet
       @contextAnalyzer.reset()
     end
 
-    def get_charset_name
+    def charset_name
       return "SHIFT_JIS"
     end
 
@@ -50,14 +50,14 @@ module CharDet
       for i in (0...aLen)
         codingState = @codingSM.next_state(aBuf[i,1])
         if codingState == EError
-          $stderr << "#{get_charset_name} prober hit error at byte #{i}\n" if $debug
+          $stderr << "#{charset_name} prober hit error at byte #{i}\n" if $debug
           @state = ENotMe
           break
         elsif codingState == EItsMe
           @state = EFoundIt
           break
         elsif codingState == EStart
-          charLen = @codingSM.get_current_charlen()
+          charLen = @codingSM.current_charlen()
           if i == 0
             @lastChar[1] = aBuf[0, 1]
             @contextAnalyzer.feed(@lastChar[2-charLen, 1], charLen)
@@ -71,17 +71,17 @@ module CharDet
 
       @lastChar[0] = aBuf[aLen-1, 1]
 
-      if get_state() == EDetecting
-        if @contextAnalyzer.got_enough_data() and (get_confidence() > SHORTCUT_THRESHOLD)
+      if state() == EDetecting
+        if @contextAnalyzer.got_enough_data() and (confidence() > SHORTCUT_THRESHOLD)
           @state = EFoundIt
         end
       end
 
-      return get_state()
+      return state()
     end
 
-    def get_confidence
-      l = [@contextAnalyzer.get_confidence(), @distributionAnalyzer.get_confidence()]
+    def confidence
+      l = [@contextAnalyzer.confidence(), @distributionAnalyzer.confidence()]
       return l.max
     end
   end

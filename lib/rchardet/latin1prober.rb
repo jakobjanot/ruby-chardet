@@ -103,7 +103,7 @@ module CharDet
       super
     end
 
-    def get_charset_name
+    def charset_name
       return "windows-1252"
     end
 
@@ -121,11 +121,11 @@ module CharDet
         @lastCharClass = charClass
       end
 
-      return get_state()
+      return state()
     end
 
-    def get_confidence
-      if get_state() == ENotMe
+    def confidence
+      if state() == ENotMe
         return 0.01
       end
 
