@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ######################## BEGIN LICENSE BLOCK ########################
 # The Original Code is Mozilla Universal charset detector code.
 #
@@ -35,15 +37,15 @@ module CharDet
   SYMBOL_CAT_ORDER = 250
   NUMBER_OF_SEQ_CAT = 4
   POSITIVE_CAT = NUMBER_OF_SEQ_CAT - 1
-  #NEGATIVE_CAT = 0
+  # NEGATIVE_CAT = 0
 
   class SingleByteCharSetProber < CharSetProber
-    def initialize(model, reversed=false, nameProber=nil)
+    def initialize(model, reversed = false, nameProber = nil)
       super()
       @model = model
       @reversed = reversed # TRUE if we need to reverse every pair in the model lookup
       @nameProber = nameProber # Optional auxiliary prober for name decision
-      reset()
+      reset
     end
 
     def reset
@@ -57,34 +59,28 @@ module CharDet
 
     def charset_name
       if @nameProber
-        return @nameProber.charset_name()
+        @nameProber.charset_name
       else
-        return @model['charsetName']
+        @model["charsetName"]
       end
     end
 
     def feed(aBuf)
-      if !@model['keepEnglishLetter']
-        aBuf = filter_without_english_letters(aBuf)
-      end
+      aBuf = filter_without_english_letters(aBuf) unless @model["keepEnglishLetter"]
       aLen = aBuf.length
-      if aLen == 0
-        return state
-      end
+      return state if aLen == 0
       aBuf.each_byte do |b|
         c = b.chr
-        order = @model['charToOrderMap'][c.bytes.first]
-        if order < SYMBOL_CAT_ORDER
-          @totalChar += 1
-        end
+        order = @model["charToOrderMap"][c.bytes.first]
+        @totalChar += 1 if order < SYMBOL_CAT_ORDER
         if order < SAMPLE_SIZE
           @freqChar += 1
           if @lastOrder < SAMPLE_SIZE
             @totalSeqs += 1
             if !@reversed
-              @seqCounters[@model['precedenceMatrix'][(@lastOrder * SAMPLE_SIZE) + order]] += 1
+              @seqCounters[@model["precedenceMatrix"][(@lastOrder * SAMPLE_SIZE) + order]] += 1
             else # reverse the order of the letters in the lookup
-              @seqCounters[@model['precedenceMatrix'][(order * SAMPLE_SIZE) + @lastOrder]] += 1
+              @seqCounters[@model["precedenceMatrix"][(order * SAMPLE_SIZE) + @lastOrder]] += 1
             end
           end
         end
@@ -93,7 +89,7 @@ module CharDet
 
       if state == EDetecting
         if @totalSeqs > SB_ENOUGH_REL_THRESHOLD
-          cf = confidence()
+          cf = confidence
           if cf > POSITIVE_SHORTCUT_THRESHOLD
             $stderr << "#{@model['charsetName']} confidence = #{cf}, we have a winner\n" if $debug
             @state = EFoundIt
@@ -104,19 +100,17 @@ module CharDet
         end
       end
 
-      return state
+      state
     end
 
     def confidence
       r = 0.01
       if @totalSeqs > 0
-        r = (1.0 * @seqCounters[POSITIVE_CAT]) / @totalSeqs / @model['mTypicalPositiveRatio']
+        r = (1.0 * @seqCounters[POSITIVE_CAT]) / @totalSeqs / @model["mTypicalPositiveRatio"]
         r = r * @freqChar / @totalChar
-        if r >= 1.0
-          r = 0.99
-        end
+        r = 0.99 if r >= 1.0
       end
-      return r
+      r
     end
   end
 end

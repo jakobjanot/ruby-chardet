@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ######################## BEGIN LICENSE BLOCK ########################
 # The Original Code is Mozilla Communicator client code.
 #
@@ -41,23 +43,20 @@ module CharDet
       @activeNum = 0
 
       for prober in @probers
-        if prober
-          prober.reset()
-          prober.active = true
-          @activeNum += 1
-        end
+        next unless prober
+        prober.reset
+        prober.active = true
+        @activeNum += 1
       end
       @bestGuessProber = nil
     end
 
     def charset_name
-      if !@bestGuessProber
-        confidence()
-        if !@bestGuessProber
-          return nil
-        end
+      unless @bestGuessProber
+        confidence
+        return nil unless @bestGuessProber
       end
-      return @bestGuessProber.charset_name()
+      @bestGuessProber.charset_name
     end
 
     def feed(aBuf)
@@ -78,10 +77,10 @@ module CharDet
           end
         end
       end
-      return state
+      state
     end
 
-    def confidence()
+    def confidence
       st = state
       if st == EFoundIt
         return 0.99
@@ -93,10 +92,10 @@ module CharDet
       for prober in @probers
         next unless prober
         unless prober.active
-          $stderr << "#{prober.charset_name()} not active\n" if $debug
+          $stderr << "#{prober.charset_name} not active\n" if $debug
           next
         end
-        cf = prober.confidence()
+        cf = prober.confidence
         $stderr << "#{prober.charset_name} confidence = #{cf}\n" if $debug
         if bestConf < cf
           bestConf = cf
@@ -104,7 +103,7 @@ module CharDet
         end
       end
       return 0.0 unless @bestGuessProber
-      return bestConf
+      bestConf
     end
   end
 end

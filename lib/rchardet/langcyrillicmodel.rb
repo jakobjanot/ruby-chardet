@@ -14,12 +14,12 @@
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
-# 
+#
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -48,7 +48,7 @@ KOI8R_CharToOrderMap = [
  35, 43, 45, 32, 40, 52, 56, 33, 61, 62, 51, 57, 47, 63, 50, 70,  # f0
 ].freeze
 
-win1251_CharToOrderMap = [ 
+win1251_CharToOrderMap = [
 255,255,255,255,255,255,255,255,255,255,254,255,255,254,255,255,  # 00
 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,  # 10
 253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,253,  # 20
@@ -143,12 +143,12 @@ IBM866_CharToOrderMap = [
 239, 68,240,241,242,243,244,245,246,247,248,249,250,251,252,255,
 ].freeze
 
-# Model Table: 
+# Model Table:
 # total sequences: 100%
 # first 512 sequences: 97.6601%
 # first 1024 sequences: 2.3389%
 # rest  sequences:      0.1237%
-# negative sequences:   0.0009% 
+# negative sequences:   0.0009%
 RussianLangModel = [
 0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,1,3,3,3,3,1,3,3,3,2,3,2,3,3,
 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,0,3,2,2,2,2,2,0,0,2,
@@ -280,51 +280,51 @@ RussianLangModel = [
 0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
 ].freeze
 
-Koi8rModel = { 
+Koi8rModel = {
   'charToOrderMap' =>  KOI8R_CharToOrderMap,
   'precedenceMatrix' =>  RussianLangModel,
   'mTypicalPositiveRatio' =>  0.976601,
   'keepEnglishLetter' =>  false,
-  'charsetName' =>  "KOI8-R"
+  'charsetName' =>  Encoding::KOI8_R
 }.freeze
 
-Win1251CyrillicModel = { 
+Win1251CyrillicModel = {
   'charToOrderMap' =>  win1251_CharToOrderMap,
   'precedenceMatrix' =>  RussianLangModel,
   'mTypicalPositiveRatio' =>  0.976601,
   'keepEnglishLetter' =>  false,
-  'charsetName' =>  "windows-1251"
+  'charsetName' =>  Encoding::CP1251
 }.freeze
 
-Latin5CyrillicModel = { 
+Latin5CyrillicModel = {
   'charToOrderMap' =>  latin5_CharToOrderMap,
   'precedenceMatrix' =>  RussianLangModel,
   'mTypicalPositiveRatio' =>  0.976601,
   'keepEnglishLetter' =>  false,
-  'charsetName' =>  "ISO-8859-5"
+  'charsetName' =>  Encoding::ISO_8859_5
 }.freeze
 
-MacCyrillicModel = { 
+MacCyrillicModel = {
   'charToOrderMap' =>  macCyrillic_CharToOrderMap,
   'precedenceMatrix' =>  RussianLangModel,
   'mTypicalPositiveRatio' =>  0.976601,
   'keepEnglishLetter' =>  false,
-  'charsetName' =>  "MacCyrillic"
+  'charsetName' =>  Encoding::MacCyrillic
 }.freeze
 
-Ibm866Model = { 
+Ibm866Model = {
   'charToOrderMap' =>  IBM866_CharToOrderMap,
   'precedenceMatrix' =>  RussianLangModel,
   'mTypicalPositiveRatio' =>  0.976601,
   'keepEnglishLetter' =>  false,
-  'charsetName' =>  "IBM866"
+  'charsetName' =>  Encoding::IBM866
 }.freeze
 
-Ibm855Model = { 
+Ibm855Model = {
   'charToOrderMap' =>  IBM855_CharToOrderMap,
   'precedenceMatrix' =>  RussianLangModel,
   'mTypicalPositiveRatio' =>  0.976601,
   'keepEnglishLetter' =>  false,
-  'charsetName' =>  "IBM855"
+  'charsetName' => Encoding::IBM855
 }.freeze
 end

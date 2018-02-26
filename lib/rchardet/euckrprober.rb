@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ######################## BEGIN LICENSE BLOCK ########################
 # The Original Code is mozilla.org code.
 #
@@ -31,12 +33,12 @@ module CharDet
     def initialize
       super()
       @codingSM = CodingStateMachine.new(EUCKRSMModel)
-      @distributionAnalyzer = EUCKRDistributionAnalysis.new()
-      reset()
+      @distributionAnalyzer = EUCKRDistributionAnalysis.new
+      reset
     end
 
     def charset_name
-      return "EUC-KR"
+      Encoding::EUC_KR
     end
   end
 end

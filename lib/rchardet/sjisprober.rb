@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ######################## BEGIN LICENSE BLOCK ########################
 # The Original Code is mozilla.org code.
 #
@@ -31,24 +33,24 @@ module CharDet
     def initialize
       super()
       @codingSM = CodingStateMachine.new(SJISSMModel)
-      @distributionAnalyzer = SJISDistributionAnalysis.new()
-      @contextAnalyzer = SJISContextAnalysis.new()
-      reset()
+      @distributionAnalyzer = SJISDistributionAnalysis.new
+      @contextAnalyzer = SJISContextAnalysis.new
+      reset
     end
 
     def reset
       super()
-      @contextAnalyzer.reset()
+      @contextAnalyzer.reset
     end
 
     def charset_name
-      return "SHIFT_JIS"
+      Encoding::Shift_JIS
     end
 
     def feed(aBuf)
       aLen = aBuf.length
       for i in (0...aLen)
-        codingState = @codingSM.next_state(aBuf[i,1])
+        codingState = @codingSM.next_state(aBuf[i, 1])
         if codingState == EError
           $stderr << "#{charset_name} prober hit error at byte #{i}\n" if $debug
           @state = ENotMe
@@ -57,32 +59,31 @@ module CharDet
           @state = EFoundIt
           break
         elsif codingState == EStart
-          charLen = @codingSM.current_charlen()
+          charLen = @codingSM.current_charlen
           if i == 0
             @lastChar[1] = aBuf[0, 1]
-            @contextAnalyzer.feed(@lastChar[2-charLen, 1], charLen)
+            @contextAnalyzer.feed(@lastChar[2 - charLen, 1], charLen)
             @distributionAnalyzer.feed(@lastChar, charLen)
           else
-            @contextAnalyzer.feed(aBuf[i+1-charLen, 2], charLen)
-            @distributionAnalyzer.feed(aBuf[i-1, 2], charLen)
+            @contextAnalyzer.feed(aBuf[i + 1 - charLen, 2], charLen)
+            @distributionAnalyzer.feed(aBuf[i - 1, 2], charLen)
           end
         end
       end
 
-      @lastChar[0] = aBuf[aLen-1, 1]
+      @lastChar[0] = aBuf[aLen - 1, 1]
 
       if state == EDetecting
-        if @contextAnalyzer.got_enough_data() and (confidence() > SHORTCUT_THRESHOLD)
+        if @contextAnalyzer.got_enough_data && (confidence > SHORTCUT_THRESHOLD)
           @state = EFoundIt
         end
       end
 
-      return state
+      state
     end
 
     def confidence
-      l = [@contextAnalyzer.confidence(), @distributionAnalyzer.confidence()]
-      return l.max
+      [@contextAnalyzer.confidence, @distributionAnalyzer.confidence].max
     end
   end
 end

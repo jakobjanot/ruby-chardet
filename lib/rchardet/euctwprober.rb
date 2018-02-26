@@ -31,12 +31,12 @@ module CharDet
     def initialize
       super()
       @codingSM = CodingStateMachine.new(EUCTWSMModel)
-      @distributionAnalyzer = EUCTWDistributionAnalysis.new()
-      reset()
+      @distributionAnalyzer = EUCTWDistributionAnalysis.new
+      reset
     end
 
     def charset_name
-      return "EUC-TW"
+      Encoding::EUC_TW
     end
   end
 end

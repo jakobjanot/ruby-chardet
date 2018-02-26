@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ######################## BEGIN LICENSE BLOCK ########################
 # The Original Code is Mozilla Communicator client code.
 #
@@ -31,12 +33,12 @@ module CharDet
     def initialize
       super
       @codingSM = CodingStateMachine.new(Big5SMModel)
-      @distributionAnalyzer = Big5DistributionAnalysis.new()
-      reset()
+      @distributionAnalyzer = Big5DistributionAnalysis.new
+      reset
     end
 
     def charset_name
-      return "Big5"
+      Encoding::Big5
     end
   end
 end

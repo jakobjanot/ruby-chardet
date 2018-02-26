@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ######################## BEGIN LICENSE BLOCK ########################
 # The Original Code is Mozilla Communicator client code.
 #
@@ -36,7 +38,7 @@ module CharDet
       @charToFreqOrder = nil # Mapping table to get frequency order from char order (get from GetOrder())
       @tableSize = nil # Size of above table
       @typicalDistributionRatio = nil # This is a constant value which varies from language to language, used in calculating confidence.  See http://www.mozilla.org/projects/intl/UniversalCharsetDetection.html for further detail.
-      reset()
+      reset
     end
 
     def reset
@@ -48,19 +50,17 @@ module CharDet
 
     def feed(aStr, aCharLen)
       # # """feed a character with known length"""
-      if aCharLen == 2
-        # we only care about 2-bytes character in our distribution analysis
-        order = order(aStr)
-      else
-        order = -1
-      end
+      order = if aCharLen == 2
+                # we only care about 2-bytes character in our distribution analysis
+                order(aStr)
+              else
+                -1
+              end
       if order >= 0
         @totalChars += 1
         # order is valid
         if order < @tableSize
-          if 512 > @charToFreqOrder[order]
-            @freqChars += 1
-          end
+          @freqChars += 1 if @charToFreqOrder[order] < 512
         end
       end
     end
@@ -68,32 +68,28 @@ module CharDet
     def confidence
       # """return confidence based on existing data"""
       # if we didn't receive any character in our consideration range, return negative answer
-      if @totalChars <= 0
-        return SURE_NO
-      end
+      return SURE_NO if @totalChars <= 0
 
       if @totalChars != @freqChars
         r = @freqChars / ((@totalChars - @freqChars) * @typicalDistributionRatio)
-        if r < SURE_YES
-          return r
-        end
+        return r if r < SURE_YES
       end
 
       # normalize confidence (we don't want to be 100% sure)
-      return SURE_YES
+      SURE_YES
     end
 
     def got_enough_data
       # It is not necessary to receive all data to draw conclusion. For charset detection,
       # certain amount of data is enough
-      return @totalChars > ENOUGH_DATA_THRESHOLD
+      @totalChars > ENOUGH_DATA_THRESHOLD
     end
 
-    def order(aStr)
+    def order(_aStr)
       # We do not handle characters based on the original encoding string, but
       # convert this encoding string to a number, here called order.
       # This allows multiple encodings of a language to share one frequency table.
-      return -1
+      -1
     end
   end
 
@@ -112,16 +108,14 @@ module CharDet
       # no validation needed here. State machine has done that
       if aStr[0, 1] >= "\xC4"
         bytes = aStr.bytes.to_a
-        return 94 * (bytes[0] - 0xC4) + bytes[1] - 0xA1
+        94 * (bytes[0] - 0xC4) + bytes[1] - 0xA1
       else
-        return -1
+        -1
       end
     end
 
     def confidence
-      if @freqChars <= MINIMUM_DATA_THRESHOLD
-        return SURE_NO
-      end
+      return SURE_NO if @freqChars <= MINIMUM_DATA_THRESHOLD
 
       super
     end
@@ -142,9 +136,9 @@ module CharDet
       # no validation needed here. State machine has done that
       if aStr[0, 1] >= "\xB0"
         bytes = aStr.bytes.to_a
-        return 94 * (bytes[0] - 0xB0) + bytes[1] - 0xA1
+        94 * (bytes[0] - 0xB0) + bytes[1] - 0xA1
       else
-        return -1
+        -1
       end
     end
   end
@@ -162,11 +156,11 @@ module CharDet
       #  first  byte range: 0xb0 -- 0xfe
       #  second byte range: 0xa1 -- 0xfe
       # no validation needed here. State machine has done that
-      if (aStr[0, 1] >= "\xB0") and (aStr[1, 1] >= "\xA1")
+      if (aStr[0, 1] >= "\xB0") && (aStr[1, 1] >= "\xA1")
         bytes = aStr.bytes.to_a
-        return 94 * (bytes[0] - 0xB0) + bytes[1] - 0xA1
+        94 * (bytes[0] - 0xB0) + bytes[1] - 0xA1
       else
-        return -1
+        -1
       end
     end
   end
@@ -192,7 +186,7 @@ module CharDet
           return 157 * (bytes[0] - 0xA4) + bytes[1] - 0x40
         end
       else
-        return -1
+        -1
       end
     end
   end
@@ -211,18 +205,16 @@ module CharDet
       #   second byte range: 0x40 -- 0x7e,  0x81 -- oxfe
       # no validation needed here. State machine has done that
       bytes = aStr.bytes.to_a
-      if (aStr[0, 1] >= "\x81") and (aStr[0, 1] <= "\x9F")
+      if (aStr[0, 1] >= "\x81") && (aStr[0, 1] <= "\x9F")
         order = 188 * (bytes[0] - 0x81)
-      elsif (aStr[0, 1] >= "\xE0") and (aStr[0, 1] <= "\xEF")
+      elsif (aStr[0, 1] >= "\xE0") && (aStr[0, 1] <= "\xEF")
         order = 188 * (bytes[0] - 0xE0 + 31)
       else
         return -1
       end
       order = order + bytes[1] - 0x40
-      if aStr[1, 1] > "\x7F"
-        order =- 1
-      end
-      return order
+      order = - 1 if aStr[1, 1] > "\x7F"
+      order
     end
   end
 
@@ -241,9 +233,9 @@ module CharDet
       # no validation needed here. State machine has done that
       if aStr[0, 1] >= "\xA0"
         bytes = aStr.bytes.to_a
-        return 94 * (bytes[0] - 0xA1) + bytes[1] - 0xa1
+        94 * (bytes[0] - 0xA1) + bytes[1] - 0xa1
       else
-        return -1
+        -1
       end
     end
   end

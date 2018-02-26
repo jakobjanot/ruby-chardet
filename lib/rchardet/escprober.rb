@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ######################## BEGIN LICENSE BLOCK ########################
 # The Original Code is mozilla.org code.
 #
@@ -31,35 +33,31 @@ module CharDet
     def initialize
       super()
       @codingSM = [
-                     CodingStateMachine.new(HZSMModel),
-                     CodingStateMachine.new(ISO2022CNSMModel),
-                     CodingStateMachine.new(ISO2022JPSMModel),
-                     CodingStateMachine.new(ISO2022KRSMModel)
-                    ]
-      reset()
+        CodingStateMachine.new(HZSMModel),
+        CodingStateMachine.new(ISO2022CNSMModel),
+        CodingStateMachine.new(ISO2022JPSMModel),
+        CodingStateMachine.new(ISO2022KRSMModel)
+      ]
+      reset
     end
 
     def reset
       super()
       for codingSM in @codingSM
-        next if !codingSM
+        next unless codingSM
         codingSM.active = true
-        codingSM.reset()
+        codingSM.reset
       end
       @activeSM = @codingSM.length
       @detectedCharset = nil
     end
 
     def charset_name
-      return @detectedCharset
+      @detectedCharset
     end
 
     def confidence
-      if @detectedCharset
-        return 0.99
-      else
-        return 0.00
-      end
+      @detectedCharset ? 0.99 : 0.00
     end
 
     def feed(aBuf)
@@ -78,13 +76,13 @@ module CharDet
             end
           elsif codingState == EItsMe
             @state = EFoundIt
-            @detectedCharset = codingSM.coding_state_machine()
+            @detectedCharset = codingSM.coding_state_machine
             return state
           end
         end
       end
 
-      return state
+      state
     end
   end
 end

@@ -22,6 +22,10 @@ Layout/MultilineMethodCallIndentation:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
+Metrics/BlockLength:
+  Exclude:
+    - 'test/**/*_test.rb'
+
 Metrics/LineLength:
   Max: 90
   Exclude:

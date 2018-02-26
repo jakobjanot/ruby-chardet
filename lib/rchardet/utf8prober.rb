@@ -43,7 +43,7 @@ module CharDet
     end
 
     def charset_name
-      return "utf-8"
+      Encoding::UTF_8
     end
 
     def feed(aBuf)
@@ -69,7 +69,7 @@ module CharDet
         end
       end
 
-      return state
+      state
     end
 
     def confidence

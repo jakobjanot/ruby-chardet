@@ -1,4 +1,6 @@
+# frozen_string_literal: true
 # encoding: US-ASCII
+
 ######################## BEGIN LICENSE BLOCK ########################
 # The Original Code is Mozilla Universal charset detector code.
 #
@@ -43,21 +45,19 @@ module CharDet
       @escDetector = /(\033|\~\{)/n
       @escCharSetProber = nil
       @charSetProbers = []
-      reset()
+      reset
     end
 
     def reset
-      @result = {encoding:nil, confidence: 0.0}
+      @result = { encoding: nil, confidence: 0.0 }
       @done = false
       @start = true
       @gotData = false
       @inputState = EPureAscii
-      @lastChar = ''
-      if @escCharSetProber
-        @escCharSetProber.reset()
-      end
+      @lastChar = ""
+      @escCharSetProber&.reset
       for prober in @charSetProbers
-        prober.reset()
+        prober.reset
       end
     end
 
@@ -67,29 +67,29 @@ module CharDet
       aLen = aBuf.length
       return if aLen == 0
 
-      if !@gotData
+      unless @gotData
         # If the data starts with BOM, we know it is UTF
         if aBuf[0, 3] == "\xEF\xBB\xBF"
           # EF BB BF  UTF-8 with BOM
-          @result = {encoding:"UTF-8", confidence: 1.0}
+          @result = { encoding: Encoding::UTF_8, confidence: 1.0 }
         elsif aBuf[0, 4] == "\xFF\xFE\x00\x00"
           # FF FE 00 00  UTF-32, little-endian BOM
-          @result = {encoding:"UTF-32LE", confidence: 1.0}
+          @result = { encoding: Encoding::UTF_32LE, confidence: 1.0 }
         elsif aBuf[0, 4] == "\x00\x00\xFE\xFF"
           # 00 00 FE FF  UTF-32, big-endian BOM
-          @result = {encoding:"UTF-32BE", confidence: 1.0}
+          @result = { encoding: Encoding::UTF_32BE, confidence: 1.0 }
         elsif aBuf[0, 4] == "\xFE\xFF\x00\x00"
           # FE FF 00 00  UCS-4, unusual octet order BOM (3412)
-          @result = {encoding:"X-ISO-10646-UCS-4-3412", confidence: 1.0}
+          @result = { encoding: Encoding::X - ISO - 10_646 - UCS - 4 - 3412, confidence: 1.0 }
         elsif aBuf[0, 4] == "\x00\x00\xFF\xFE"
           # 00 00 FF FE  UCS-4, unusual octet order BOM (2143)
-          @result = {encoding: "X-ISO-10646-UCS-4-2143", confidence:  1.0}
+          @result = { encoding: Encoding::X - ISO - 10_646 - UCS - 4 - 2143, confidence: 1.0 }
         elsif aBuf[0, 2] == "\xFF\xFE"
           # FF FE  UTF-16, little endian BOM
-          @result = {encoding: "UTF-16LE", confidence:  1.0}
+          @result = { encoding: Encoding::UTF_16LE, confidence:  1.0 }
         elsif aBuf[0, 2] == "\xFE\xFF"
           # FE FF  UTF-16, big endian BOM
-          @result = {encoding: "UTF-16BE", confidence:  1.0}
+          @result = { encoding: Encoding::UTF_16BE, confidence:  1.0 }
         elsif aBuf[0, 3] == "\x2B\x2F\x76" && ["\x38", "\x39", "\x2B", "\x2F"].include?(aBuf[3, 1])
           # NOTE: Ruby only includes "dummy" support for UTF-7.
           # A Ruby UTF-7 string can't have methods called on it, nor can it be converted to anything else, but "BINARY"/"ASCII-8BIT".
@@ -99,70 +99,64 @@ module CharDet
           # 2B 2F 76 2B  UTF-7
           # 2B 2F 76 2F  UTF-7
           # 2B 2F 76 38 2D  UTF-7 with no following character (empty string)
-          @result = {encoding: "UTF-7", confidence:  0.99}
+          @result = { encoding: Encoding::UTF_7, confidence: 0.99 }
         end
       end
 
       @gotData = true
-      if @result[:encoding] and (@result[:confidence] > 0.0)
+      if @result[:encoding] && (@result[:confidence] > 0.0)
         @done = true
         return
       end
       if @inputState == EPureAscii
-        if @highBitDetector =~ (aBuf)
+        if @highBitDetector =~ aBuf
           @inputState = EHighbyte
-        elsif (@inputState == EPureAscii) and @escDetector =~ (@lastChar + aBuf)
+        elsif (@inputState == EPureAscii) && @escDetector =~ ((@lastChar + aBuf))
           @inputState = EEscAscii
         end
       end
 
       @lastChar = aBuf[-1, 1]
       if @inputState == EEscAscii
-        if !@escCharSetProber
-          @escCharSetProber = EscCharSetProber.new()
-        end
+        @escCharSetProber ||= EscCharSetProber.new
         if @escCharSetProber.feed(aBuf) == EFoundIt
-          @result = {encoding: @escCharSetProber.charset_name(),
-            confidence:  @escCharSetProber.confidence()
-          }
+          @result = { encoding: @escCharSetProber.charset_name,
+                      confidence: @escCharSetProber.confidence }
           @done = true
         end
       elsif @inputState == EHighbyte
         if @charSetProbers.nil? || @charSetProbers.empty?
-          @charSetProbers = [MBCSGroupProber.new(), SBCSGroupProber.new(), Latin1Prober.new()]
+          @charSetProbers = [MBCSGroupProber.new, SBCSGroupProber.new, Latin1Prober.new]
         end
         for prober in @charSetProbers
-          if prober.feed(aBuf) == EFoundIt
-            @result = {encoding: prober.charset_name(),
-              confidence:  prober.confidence()}
-            @done = true
-            break
-          end
+          next unless prober.feed(aBuf) == EFoundIt
+          @result = { encoding: prober.charset_name, confidence: prober.confidence }
+          @done = true
+          break
         end
       end
-
     end
 
     def close
       return if @done
-      if !@gotData
+      unless @gotData
         $stderr << "no data received!\n" if $debug
         return
       end
       @done = true
 
       if @inputState == EPureAscii
-        @result = {encoding:'ascii', confidence: 1.0}
+        @result = { encoding: Encoding::ASCII, confidence: 1.0 }
         return @result
       end
 
       if @inputState == EHighbyte
         confidences = {}
-        @charSetProbers.each{ |prober| confidences[prober] = prober.confidence }
-        maxProber = @charSetProbers.max{ |a,b| confidences[a] <=> confidences[b] }
-        if maxProber and maxProber.confidence > MINIMUM_THRESHOLD
-          @result = {encoding: maxProber.charset_name(),
-            confidence:  maxProber.confidence()}
+        @charSetProbers.each { |prober| confidences[prober] = prober.confidence }
+        maxProber = @charSetProbers.max { |a, b| confidences[a] <=> confidences[b] }
+        if maxProber && (maxProber.confidence > MINIMUM_THRESHOLD)
+          @result = { encoding: maxProber.charset_name,
+                      confidence:  maxProber.confidence }
           return @result
         end
       end
@@ -170,7 +164,7 @@ module CharDet
       if $debug
         $stderr << "no probers hit minimum threshhold\n" if $debug
         for prober in @charSetProbers[0].probers
-          next if !prober
+          next unless prober
           $stderr << "#{prober.charset_name} confidence = #{prober.confidence}\n" if $debug
         end
       end

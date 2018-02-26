@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ######################## BEGIN LICENSE BLOCK ########################
 # The Original Code is mozilla.org code.
 #
@@ -31,18 +33,18 @@ module CharDet
     def initialize
       super()
       @codingSM = CodingStateMachine.new(EUCJPSMModel)
-      @distributionAnalyzer = EUCJPDistributionAnalysis.new()
-      @contextAnalyzer = EUCJPContextAnalysis.new()
+      @distributionAnalyzer = EUCJPDistributionAnalysis.new
+      @contextAnalyzer = EUCJPContextAnalysis.new
       reset
     end
 
     def reset
       super()
-      @contextAnalyzer.reset()
+      @contextAnalyzer.reset
     end
 
     def charset_name
-      return "EUC-JP"
+      Encoding::EUC_JP
     end
 
     def feed(aBuf)
@@ -57,32 +59,31 @@ module CharDet
           @state = EFoundIt
           break
         elsif codingState == EStart
-          charLen = @codingSM.current_charlen()
+          charLen = @codingSM.current_charlen
           if i == 0
             @lastChar[1] = aBuf[0, 1]
             @contextAnalyzer.feed(@lastChar, charLen)
             @distributionAnalyzer.feed(@lastChar, charLen)
           else
-            @contextAnalyzer.feed(aBuf[i-1, 2], charLen)
-            @distributionAnalyzer.feed(aBuf[i-1, 2], charLen)
+            @contextAnalyzer.feed(aBuf[i - 1, 2], charLen)
+            @distributionAnalyzer.feed(aBuf[i - 1, 2], charLen)
           end
         end
       end
 
-      @lastChar[0] = aBuf[aLen-1, 1]
+      @lastChar[0] = aBuf[aLen - 1, 1]
 
       if state == EDetecting
-        if @contextAnalyzer.got_enough_data() and (confidence() > SHORTCUT_THRESHOLD)
+        if @contextAnalyzer.got_enough_data && (confidence > SHORTCUT_THRESHOLD)
           @state = EFoundIt
         end
       end
 
-      return state
+      state
     end
 
     def confidence
-      l = [@contextAnalyzer.confidence,@distributionAnalyzer.confidence]
-      return l.max
+      [@contextAnalyzer.confidence, @distributionAnalyzer.confidence].max
     end
   end
 end
