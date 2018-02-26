@@ -4,32 +4,30 @@
 require_relative "test_helper"
 
 describe "Simple" do
-  def assert_chardet_spec_detect(file, expected)
-    content = File.open("test/simple_assets/#{file}.txt", "rb", &:read)
-    assert_equal expected, CharDet.detect(content)
-  end
-
-  def pending
-    yield
-  rescue StandardError
-    skip
-  else
-    raise "Fixed"
+  def simple_assets_path
+    Pathname.new("test").join("simple_assets")
   end
 
   it "detects UTF-7" do
-    assert_chardet_spec_detect "UTF-7",
-                               encoding: Encoding::UTF_7, confidence: 0.99
+    assert_equal(
+      { encoding: Encoding::UTF_7, confidence: 0.99 },
+      CharDet.detect(simple_assets_path.join("UTF-7.txt").open("rb", &:read))
+    )
   end
 
   it "detects EUC_JP" do
-    assert_chardet_spec_detect "EUC-JP",
-                               encoding: Encoding::EUC-JP, confidence: 0.99
+    assert_equal(
+      { encoding: Encoding::EucJP, confidence: 0.99 },
+      CharDet.detect(simple_assets_path.join("EUC-JP.txt").open("rb", &:read))
+    )
   end
 
   it "detects Shift_JIS" do
-    assert_chardet_spec_detect "Shift_JIS",
-                               encoding: Encoding::SHIFT_JIS, confidence: (RUBY_VERSION > "1.9.3" ? 0.99 : 1) # TODO: the 1.9 value might be wrong but I cannot find any bug
+    assert_equal(
+      { encoding: Encoding::SHIFT_JIS, confidence: (RUBY_VERSION > "1.9.3" ? 0.99 : 1) },
+      # TODO: the 1.9 value might be wrong but I cannot find any bug
+      CharDet.detect(simple_assets_path.join("Shift_JIS.txt").open("rb", &:read))
+    )
   end
 
   it "detects Shift_JIS from short string" do
@@ -37,46 +35,62 @@ describe "Simple" do
   end
 
   it "detects Shift_JIS from more than four characters" do
-    CharDet.detect("四文字以上の日本語".encode("Shift_JIS"))[:encoding].must_equal Encoding::SHIFT_JIS
+    CharDet.detect("四文字以上の日本語".encode("Shift_JIS"))[:encoding].must_equal
+      Encoding::SHIFT_JIS
   end
 
   it "detects Shift_JIS from Japanese and ASCII characters" do
-    CharDet.detect("日本語 and ASCII characters".encode("Shift_JIS"))[:encoding].must_equal Encoding::SHIFT_JIS
+    CharDet.detect("日本語 and ASCII characters".encode("Shift_JIS"))[:encoding].must_equal \
+      Encoding::SHIFT_JIS
   end
 
   it "detects UTF_8" do
-    assert_chardet_spec_detect "UTF-8",
-                               encoding: Encoding::UTF_8, confidence: 0.99
+    assert_equal(
+      { encoding: Encoding::UTF_8, confidence: 0.99 },
+      CharDet.detect(simple_assets_path.join("UTF-8.txt").open("rb", &:read))
+    )
   end
 
   it "detects eucJP_ms" do
-    assert_chardet_spec_detect "eucJP-ms",
-                               encoding: Encoding::EUC_JP, confidence: 0.99
+    assert_equal(
+      { encoding: Encoding::EucJP, confidence: 0.99 },
+      CharDet.detect(simple_assets_path.join("eucJP-ms.txt").open("rb", &:read))
+    )
   end
 
   it "detects UTF_16BE" do
-    assert_chardet_spec_detect "UTF-16BE",
-                               encoding: Encoding::UTF_16BE, confidence: 1
+    assert_equal(
+      { encoding: Encoding::UTF_16BE, confidence: 1 },
+      CharDet.detect(simple_assets_path.join("UTF-16BE.txt").open("rb", &:read))
+    )
   end
 
   it "detects UTF_16LE" do
-    assert_chardet_spec_detect "UTF-16LE",
-                               encoding: Encoding::UTF_16LE, confidence: 1
+    assert_equal(
+      { encoding: Encoding::UTF_16LE, confidence: 1 },
+      CharDet.detect(simple_assets_path.join("UTF-16LE.txt").open("rb", &:read))
+    )
   end
 
   it "detects ISO_2022_JP" do
-    assert_chardet_spec_detect "ISO-2022-JP",
-                               encoding: Encoding::ISO_2022_JP, confidence: 0.99
+    assert_equal(
+      { encoding: Encoding::ISO_2022_JP, confidence: 0.99 },
+      CharDet.detect(simple_assets_path.join("ISO-2022-JP.txt").open("rb", &:read))
+    )
   end
 
   it "detects big5" do
-    assert_chardet_spec_detect "big5",
-                               encoding: Encoding::BIG5, confidence: 0.99
+    assert_equal(
+      { encoding: Encoding::BIG5, confidence: 0.99 },
+      CharDet.detect(simple_assets_path.join("big5.txt").open("rb", &:read))
+    )
   end
 
   it "detects russian" do
     # this failed when using $KCODE='u' on 1.8 ... just making sure it stays put
-    CharDet.detect("Toto je zpr\xE1va ve form\xE1tu MIME s n\xECkolika \xE8\xE1stmi.\n")[:encoding].must_equal Encoding::CP1251
+    CharDet.detect(
+      "Toto je zpr\xE1va ve form\xE1tu MIME s n\xECkolika \xE8\xE1stmi.\n"
+    )[:encoding].must_equal Encoding::CP1251
   end
 
   it "detects what is likely to be ISO-8859-2 w/ garbage chars" do
