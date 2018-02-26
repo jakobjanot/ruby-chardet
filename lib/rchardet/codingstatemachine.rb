@@ -61,7 +61,7 @@ module CharDet
     end
 
     def coding_state_machine
-      @model['name']
+      @model['charsetName']
     end
   end
 end

@@ -34,9 +34,9 @@ module CharDet
       super()
       @codingSM = [
         CodingStateMachine.new(HZSMModel),
-        CodingStateMachine.new(ISO2022CNSMModel),
+        # CodingStateMachine.new(ISO2022CNSMModel), # Not supported in Ruby
         CodingStateMachine.new(ISO2022JPSMModel),
-        CodingStateMachine.new(ISO2022KRSMModel)
+        # CodingStateMachine.new(ISO2022KRSMModel)  # Not supported in Ruby
       ]
       reset
     end

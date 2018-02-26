@@ -77,63 +77,64 @@ module CharDet
     'classFactor' => 6,
     'stateTable' => HZ_st,
     'charLenTable' => HZCharLenTable,
-    'name' => "HZ-GB-2312"
+    'charsetName' => Encoding::GB2312
   }.freeze
 
-ISO2022CN_cls = [
-2,0,0,0,0,0,0,0,  # 00 - 07
-0,0,0,0,0,0,0,0,  # 08 - 0f
-0,0,0,0,0,0,0,0,  # 10 - 17
-0,0,0,1,0,0,0,0,  # 18 - 1f
-0,0,0,0,0,0,0,0,  # 20 - 27
-0,3,0,0,0,0,0,0,  # 28 - 2f
-0,0,0,0,0,0,0,0,  # 30 - 37
-0,0,0,0,0,0,0,0,  # 38 - 3f
-0,0,0,4,0,0,0,0,  # 40 - 47
-0,0,0,0,0,0,0,0,  # 48 - 4f
-0,0,0,0,0,0,0,0,  # 50 - 57
-0,0,0,0,0,0,0,0,  # 58 - 5f
-0,0,0,0,0,0,0,0,  # 60 - 67
-0,0,0,0,0,0,0,0,  # 68 - 6f
-0,0,0,0,0,0,0,0,  # 70 - 77
-0,0,0,0,0,0,0,0,  # 78 - 7f
-2,2,2,2,2,2,2,2,  # 80 - 87
-2,2,2,2,2,2,2,2,  # 88 - 8f
-2,2,2,2,2,2,2,2,  # 90 - 97
-2,2,2,2,2,2,2,2,  # 98 - 9f
-2,2,2,2,2,2,2,2,  # a0 - a7
-2,2,2,2,2,2,2,2,  # a8 - af
-2,2,2,2,2,2,2,2,  # b0 - b7
-2,2,2,2,2,2,2,2,  # b8 - bf
-2,2,2,2,2,2,2,2,  # c0 - c7
-2,2,2,2,2,2,2,2,  # c8 - cf
-2,2,2,2,2,2,2,2,  # d0 - d7
-2,2,2,2,2,2,2,2,  # d8 - df
-2,2,2,2,2,2,2,2,  # e0 - e7
-2,2,2,2,2,2,2,2,  # e8 - ef
-2,2,2,2,2,2,2,2,  # f0 - f7
-2,2,2,2,2,2,2,2,  # f8 - ff
-].freeze
-
-ISO2022CN_st = [
-EStart,     3,EError,EStart,EStart,EStart,EStart,EStart,# 00-07
-EStart,EError,EError,EError,EError,EError,EError,EError,# 08-0f
-EError,EError,EItsMe,EItsMe,EItsMe,EItsMe,EItsMe,EItsMe,# 10-17
-EItsMe,EItsMe,EItsMe,EError,EError,EError,     4,EError,# 18-1f
-EError,EError,EError,EItsMe,EError,EError,EError,EError,# 20-27
-     5,     6,EError,EError,EError,EError,EError,EError,# 28-2f
-EError,EError,EError,EItsMe,EError,EError,EError,EError,# 30-37
-EError,EError,EError,EError,EError,EItsMe,EError,EStart,# 38-3f
-].freeze
-
-ISO2022CNCharLenTable = [0, 0, 0, 0, 0, 0, 0, 0, 0].freeze
-
-ISO2022CNSMModel = {'classTable' => ISO2022CN_cls,
-    'classFactor' => 9,
-    'stateTable' => ISO2022CN_st,
-    'charLenTable' => ISO2022CNCharLenTable,
-    'name' => "ISO-2022-CN"
-  }.freeze
+# No support in Ruby for ISO2022CN
+# ISO2022CN_cls = [
+# 2,0,0,0,0,0,0,0,  # 00 - 07
+# 0,0,0,0,0,0,0,0,  # 08 - 0f
+# 0,0,0,0,0,0,0,0,  # 10 - 17
+# 0,0,0,1,0,0,0,0,  # 18 - 1f
+# 0,0,0,0,0,0,0,0,  # 20 - 27
+# 0,3,0,0,0,0,0,0,  # 28 - 2f
+# 0,0,0,0,0,0,0,0,  # 30 - 37
+# 0,0,0,0,0,0,0,0,  # 38 - 3f
+# 0,0,0,4,0,0,0,0,  # 40 - 47
+# 0,0,0,0,0,0,0,0,  # 48 - 4f
+# 0,0,0,0,0,0,0,0,  # 50 - 57
+# 0,0,0,0,0,0,0,0,  # 58 - 5f
+# 0,0,0,0,0,0,0,0,  # 60 - 67
+# 0,0,0,0,0,0,0,0,  # 68 - 6f
+# 0,0,0,0,0,0,0,0,  # 70 - 77
+# 0,0,0,0,0,0,0,0,  # 78 - 7f
+# 2,2,2,2,2,2,2,2,  # 80 - 87
+# 2,2,2,2,2,2,2,2,  # 88 - 8f
+# 2,2,2,2,2,2,2,2,  # 90 - 97
+# 2,2,2,2,2,2,2,2,  # 98 - 9f
+# 2,2,2,2,2,2,2,2,  # a0 - a7
+# 2,2,2,2,2,2,2,2,  # a8 - af
+# 2,2,2,2,2,2,2,2,  # b0 - b7
+# 2,2,2,2,2,2,2,2,  # b8 - bf
+# 2,2,2,2,2,2,2,2,  # c0 - c7
+# 2,2,2,2,2,2,2,2,  # c8 - cf
+# 2,2,2,2,2,2,2,2,  # d0 - d7
+# 2,2,2,2,2,2,2,2,  # d8 - df
+# 2,2,2,2,2,2,2,2,  # e0 - e7
+# 2,2,2,2,2,2,2,2,  # e8 - ef
+# 2,2,2,2,2,2,2,2,  # f0 - f7
+# 2,2,2,2,2,2,2,2,  # f8 - ff
+# ].freeze
+#
+# ISO2022CN_st = [
+# EStart,     3,EError,EStart,EStart,EStart,EStart,EStart,# 00-07
+# EStart,EError,EError,EError,EError,EError,EError,EError,# 08-0f
+# EError,EError,EItsMe,EItsMe,EItsMe,EItsMe,EItsMe,EItsMe,# 10-17
+# EItsMe,EItsMe,EItsMe,EError,EError,EError,     4,EError,# 18-1f
+# EError,EError,EError,EItsMe,EError,EError,EError,EError,# 20-27
+#      5,     6,EError,EError,EError,EError,EError,EError,# 28-2f
+# EError,EError,EError,EItsMe,EError,EError,EError,EError,# 30-37
+# EError,EError,EError,EError,EError,EItsMe,EError,EStart,# 38-3f
+# ].freeze
+#
+# ISO2022CNCharLenTable = [0, 0, 0, 0, 0, 0, 0, 0, 0].freeze
+#
+# ISO2022CNSMModel = {'classTable' => ISO2022CN_cls,
+#     'classFactor' => 9,
+#     'stateTable' => ISO2022CN_st,
+#     'charLenTable' => ISO2022CNCharLenTable,
+#     'charsetName' => Encoding::ISO_2022_CN
+#   }.freeze
 
 ISO2022JP_cls = [
 2,0,0,0,0,0,0,0,  # 00 - 07
@@ -188,58 +189,59 @@ ISO2022JPSMModel = {'classTable' => ISO2022JP_cls,
     'classFactor' => 10,
     'stateTable' => ISO2022JP_st,
     'charLenTable' => ISO2022JPCharLenTable,
-    'name' => Encoding::ISO_2022_JP
+    'charsetName' => Encoding::ISO_2022_JP
   }.freeze
 
-ISO2022KR_cls = [
-2,0,0,0,0,0,0,0,  # 00 - 07
-0,0,0,0,0,0,0,0,  # 08 - 0f
-0,0,0,0,0,0,0,0,  # 10 - 17
-0,0,0,1,0,0,0,0,  # 18 - 1f
-0,0,0,0,3,0,0,0,  # 20 - 27
-0,4,0,0,0,0,0,0,  # 28 - 2f
-0,0,0,0,0,0,0,0,  # 30 - 37
-0,0,0,0,0,0,0,0,  # 38 - 3f
-0,0,0,5,0,0,0,0,  # 40 - 47
-0,0,0,0,0,0,0,0,  # 48 - 4f
-0,0,0,0,0,0,0,0,  # 50 - 57
-0,0,0,0,0,0,0,0,  # 58 - 5f
-0,0,0,0,0,0,0,0,  # 60 - 67
-0,0,0,0,0,0,0,0,  # 68 - 6f
-0,0,0,0,0,0,0,0,  # 70 - 77
-0,0,0,0,0,0,0,0,  # 78 - 7f
-2,2,2,2,2,2,2,2,  # 80 - 87
-2,2,2,2,2,2,2,2,  # 88 - 8f
-2,2,2,2,2,2,2,2,  # 90 - 97
-2,2,2,2,2,2,2,2,  # 98 - 9f
-2,2,2,2,2,2,2,2,  # a0 - a7
-2,2,2,2,2,2,2,2,  # a8 - af
-2,2,2,2,2,2,2,2,  # b0 - b7
-2,2,2,2,2,2,2,2,  # b8 - bf
-2,2,2,2,2,2,2,2,  # c0 - c7
-2,2,2,2,2,2,2,2,  # c8 - cf
-2,2,2,2,2,2,2,2,  # d0 - d7
-2,2,2,2,2,2,2,2,  # d8 - df
-2,2,2,2,2,2,2,2,  # e0 - e7
-2,2,2,2,2,2,2,2,  # e8 - ef
-2,2,2,2,2,2,2,2,  # f0 - f7
-2,2,2,2,2,2,2,2,  # f8 - ff
-].freeze
-
-ISO2022KR_st = [
-EStart,     3,EError,EStart,EStart,EStart,EError,EError,# 00-07
-EError,EError,EError,EError,EItsMe,EItsMe,EItsMe,EItsMe,# 08-0f
-EItsMe,EItsMe,EError,EError,EError,     4,EError,EError,# 10-17
-EError,EError,EError,EError,     5,EError,EError,EError,# 18-1f
-EError,EError,EError,EItsMe,EStart,EStart,EStart,EStart,# 20-27
-].freeze
-
-ISO2022KRCharLenTable = [0, 0, 0, 0, 0, 0].freeze
-
-ISO2022KRSMModel = {'classTable' => ISO2022KR_cls,
-    'classFactor' => 6,
-    'stateTable' => ISO2022KR_st,
-    'charLenTable' => ISO2022KRCharLenTable,
-    'name' => "ISO_2022_KR" # Encoding::ISO_2022_KR
-  }.freeze
+# No support in Ruby for ISO2022KR
+# ISO2022KR_cls = [
+# 2,0,0,0,0,0,0,0,  # 00 - 07
+# 0,0,0,0,0,0,0,0,  # 08 - 0f
+# 0,0,0,0,0,0,0,0,  # 10 - 17
+# 0,0,0,1,0,0,0,0,  # 18 - 1f
+# 0,0,0,0,3,0,0,0,  # 20 - 27
+# 0,4,0,0,0,0,0,0,  # 28 - 2f
+# 0,0,0,0,0,0,0,0,  # 30 - 37
+# 0,0,0,0,0,0,0,0,  # 38 - 3f
+# 0,0,0,5,0,0,0,0,  # 40 - 47
+# 0,0,0,0,0,0,0,0,  # 48 - 4f
+# 0,0,0,0,0,0,0,0,  # 50 - 57
+# 0,0,0,0,0,0,0,0,  # 58 - 5f
+# 0,0,0,0,0,0,0,0,  # 60 - 67
+# 0,0,0,0,0,0,0,0,  # 68 - 6f
+# 0,0,0,0,0,0,0,0,  # 70 - 77
+# 0,0,0,0,0,0,0,0,  # 78 - 7f
+# 2,2,2,2,2,2,2,2,  # 80 - 87
+# 2,2,2,2,2,2,2,2,  # 88 - 8f
+# 2,2,2,2,2,2,2,2,  # 90 - 97
+# 2,2,2,2,2,2,2,2,  # 98 - 9f
+# 2,2,2,2,2,2,2,2,  # a0 - a7
+# 2,2,2,2,2,2,2,2,  # a8 - af
+# 2,2,2,2,2,2,2,2,  # b0 - b7
+# 2,2,2,2,2,2,2,2,  # b8 - bf
+# 2,2,2,2,2,2,2,2,  # c0 - c7
+# 2,2,2,2,2,2,2,2,  # c8 - cf
+# 2,2,2,2,2,2,2,2,  # d0 - d7
+# 2,2,2,2,2,2,2,2,  # d8 - df
+# 2,2,2,2,2,2,2,2,  # e0 - e7
+# 2,2,2,2,2,2,2,2,  # e8 - ef
+# 2,2,2,2,2,2,2,2,  # f0 - f7
+# 2,2,2,2,2,2,2,2,  # f8 - ff
+# ].freeze
+#
+# ISO2022KR_st = [
+# EStart,     3,EError,EStart,EStart,EStart,EError,EError,# 00-07
+# EError,EError,EError,EError,EItsMe,EItsMe,EItsMe,EItsMe,# 08-0f
+# EItsMe,EItsMe,EError,EError,EError,     4,EError,EError,# 10-17
+# EError,EError,EError,EError,     5,EError,EError,EError,# 18-1f
+# EError,EError,EError,EItsMe,EStart,EStart,EStart,EStart,# 20-27
+# ].freeze
+#
+# ISO2022KRCharLenTable = [0, 0, 0, 0, 0, 0].freeze
+#
+# ISO2022KRSMModel = {'classTable' => ISO2022KR_cls,
+#     'classFactor' => 6,
+#     'stateTable' => ISO2022KR_st,
+#     'charLenTable' => ISO2022KRCharLenTable,
+#     'charsetName' => Encoding::ISO_2022_KR
+#   }.freeze
 end
