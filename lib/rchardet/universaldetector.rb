@@ -1,5 +1,4 @@
-# frozen_string_literal: true
-# encoding: US-ASCII
+# frozen_string_literal: true, encoding: US-ASCII
 
 ######################## BEGIN LICENSE BLOCK ########################
 # The Original Code is Mozilla Universal charset detector code.

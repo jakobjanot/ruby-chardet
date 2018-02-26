@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ######################## BEGIN LICENSE BLOCK ########################
 # The Original Code is mozilla.org code.
 #
@@ -33,12 +35,12 @@ module CharDet
     def initialize
       super()
       @codingSM = CodingStateMachine.new(UTF8SMModel)
-      reset()
+      reset
     end
 
     def reset
       super()
-      @codingSM.reset()
+      @codingSM.reset
       @numOfMBChar = 0
     end
 
@@ -57,16 +59,12 @@ module CharDet
           @state = EFoundIt
           break
         elsif codingState == EStart
-          if @codingSM.current_charlen() >= 2
-            @numOfMBChar += 1
-          end
+          @numOfMBChar += 1 if @codingSM.current_charlen >= 2
         end
       end
 
       if state == EDetecting
-        if confidence() > SHORTCUT_THRESHOLD
-          @state = EFoundIt
-        end
+        @state = EFoundIt if confidence > SHORTCUT_THRESHOLD
       end
 
       state
@@ -75,8 +73,8 @@ module CharDet
     def confidence
       unlike = 0.99
       if @numOfMBChar < 6
-        for i in (0...@numOfMBChar)
-          unlike = unlike * ONE_CHAR_PROB
+        for _i in (0...@numOfMBChar)
+          unlike *= ONE_CHAR_PROB
         end
         return 1.0 - unlike
       else

@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 require_relative "test_helper"
@@ -24,7 +23,7 @@ describe "Simple" do
 
   it "detects Shift_JIS" do
     assert_equal(
-      { encoding: Encoding::SHIFT_JIS, confidence: (RUBY_VERSION > "1.9.3" ? 0.99 : 1) },
+      { encoding: Encoding::SHIFT_JIS, confidence: 0.99 },
       # TODO: the 1.9 value might be wrong but I cannot find any bug
       CharDet.detect(simple_assets_path.join("Shift_JIS.txt").open("rb", &:read))
     )
@@ -35,8 +34,7 @@ describe "Simple" do
   end
 
   it "detects Shift_JIS from more than four characters" do
-    CharDet.detect("四文字以上の日本語".encode("Shift_JIS"))[:encoding].must_equal
-      Encoding::SHIFT_JIS
+    CharDet.detect("四文字以上の日本語".encode("Shift_JIS"))[:encoding].must_equal Encoding::SHIFT_JIS
   end
 
   it "detects Shift_JIS from Japanese and ASCII characters" do
